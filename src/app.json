@@ -1,0 +1,23 @@
+{
+  "devtools_port": 9090,
+  "startup_app": {
+    "name": "OpenFin windowclosing",
+    "description": "interapp stress test",
+    "url": "http://localhost:9098",
+    "uuid": "interapp-stress-test",
+    "autoShow": true,
+    "defaultHeight":"900",
+    "defaultLeft": "20",
+    "defaultTop":"20",
+    "defaultWidth":"900"
+  },
+  "runtime": {
+    "arguments": "",
+    "version": "alpha"
+  },
+  "shortcut": {
+    "company": "OpenFin",
+    "description": "stress test interapp bus",
+    "name": "stress_test_interApp"
+  }
+}
