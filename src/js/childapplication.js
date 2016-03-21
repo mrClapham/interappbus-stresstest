@@ -61,10 +61,8 @@ function initListeners() {
             TOPIC_APP_TO_APP,
         function (message, uuid) {
             console.log("The child application has received ",message, _interAppMessage)
-            _interAppMessage.innerHTML = "uuid: "+uuid+" width: "+ message.message;
+            _interAppMessage.innerHTML = "Send from uuid: '"+uuid+"' Message: '"+ message.message+"'";
         });
-
-
 
 }
 

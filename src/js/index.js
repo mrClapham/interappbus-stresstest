@@ -7,7 +7,8 @@ var _mainWin,
     windowsNames = [],
     winId = 0,
     _app_to_app_button = null,
-    _app_to_app_uuid ="APP_0";
+    _app_to_app_uuid ="APP_0",
+    _app_to_app_message = null;
 
 
 
@@ -30,10 +31,11 @@ function initWithOpenFin(){
     // NB it is 'Window' not 'Application' that the EventListener is being attached to
     _mainWin = fin.desktop.Window.getCurrent();
 
-    _listeners          = document.querySelector("#listeners");
-    _namedSendResult    = document.querySelector("#named-send-result");
-    _unnamedSendResult  = document.querySelector("#unnamed-send-result");
-    _app_to_app_uuid    = document.querySelector("#_app_to_app_uuid");
+    _listeners              = document.querySelector("#listeners");
+    _namedSendResult        = document.querySelector("#named-send-result");
+    _unnamedSendResult      = document.querySelector("#unnamed-send-result");
+    _app_to_app_uuid        = document.querySelector("#app_to_app_uuid");
+    _app_to_app_message     = document.querySelector("#app_to_app_message");
 
     document.querySelector("#uuid").innerHTML = "<h2>UUID: "+_mainWin.app_uuid+"</h2>";
     fin.desktop.System.getVersion(function (version) {
@@ -77,7 +79,7 @@ function initWithOpenFin(){
 
 
     document.querySelector("#app_to_app_button").addEventListener('click', function(e){
-        sendAppToApp(_app_to_app_uuid.value, "the message is hello world")
+        sendAppToApp(_app_to_app_uuid.value, _app_to_app_message.value)
     });
 
 
