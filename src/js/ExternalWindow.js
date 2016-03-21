@@ -1,6 +1,3 @@
-/**
- * Created by grahamclapham on 05/01/16.
- */
 // We need a unique name for each window - this function generates a random one.
 var _generateRandomName = function(){
     var text = "";
@@ -58,16 +55,14 @@ ExternalWindow = function(name){
 
     var _this = this;
 
-
     return new Promise(function(resolve, reject){
         var _initCallback = function(){
-            this.getNativeWindow().document.querySelector("#title-display").innerHTML ="<h4>"+_window_config.name+"</h4>";
+            this.getNativeWindow().document.querySelector("#title-display").innerHTML = _window_config.name;
             resolve(this);
         };
         var _onIntFail = function(){
             console.log("Initialisation failed.")
         };
-
         try{
             fin.desktop.main(function(){
                 _this._window = new fin.desktop.Window(_window_config,_initCallback,_onIntFail);
@@ -76,6 +71,5 @@ ExternalWindow = function(name){
             console.log("Error: ", err);
             reject(err)
         }
-
     });
 };

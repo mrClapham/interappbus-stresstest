@@ -1,4 +1,4 @@
-var _childApp, _messageButton, PARENT_APP = 'interapp-stress-test';
+var _childApp, _messageButton, _interAppMessage;
 
 document.addEventListener("DOMContentLoaded", function () {
     initChild();
@@ -12,6 +12,7 @@ function initChild() {
 }
 
 initChildWithOpenFin = function () {
+    _interAppMessage = document.querySelector("#inter-app-message")
     _childApp = fin.desktop.Window.getCurrent();
     _childApp.show();
 
@@ -41,8 +42,6 @@ initChildWithOpenFin = function () {
         sendToUnNamedMessage();
     });
 
-
-
     initListeners();
 };
 
@@ -58,14 +57,17 @@ function initListeners() {
 
         });
 
+        fin.desktop.InterApplicationBus.subscribe(PARENT_UUID,
+            TOPIC_APP_TO_APP,
+        function (message, uuid) {
+            console.log("The child application has received ",message, _interAppMessage)
+            _interAppMessage.innerHTML = "uuid: "+uuid+" width: "+ message.message;
+        });
+
+
+
 }
 
-
-/*
-
- An error occured: {"msg":{"action":"send-message","payload":{"destinationUuid":"cortexdesktoplauncher","destinationWindowName":"favouriting-app","directMsg":true,"sourceWindowName":"allAppsWindow","topic":{"AppKey":"RN","ApplicationIcon":null,"AssetClasses":["FX"],"CategoryName":"Services","Description":"RN","DisplayOrder":0,"EnableViaSailpoint":false,"FavoriteAppOrder":0,"Id":551,"InternalUri":"\\RiskNavigator\\RiskUI.exe","IsFavorite":true,"IsNewApp":false,"IsSuggested":false,"LongName":"Risk Navigator","MarketingUri":"http://risknavigator.staging.echonet/risk/static/","MaxNumberOfInstances":1,"ShortDescription":"RN","ShortName":"RN","category":"Services","longName":"Risk Navigator","shortName":"RN"}},"sourceId":16390},"reason":"No subscribed connections.","success":false}
-
- */
 
 function publishMany(num) {
     var _count = 0;
@@ -110,7 +112,7 @@ function sendMessage() {
         console.log("ERROR MESSAGE ", e);
     };
 
-    fin.desktop.InterApplicationBus.send(PARENT_APP, 'universal-message', {
+    fin.desktop.InterApplicationBus.send(PARENT_UUID, 'universal-message', {
         num: _random,
         num: _random,
         text: "The random number is: "
@@ -122,7 +124,7 @@ function sendToNamedMessage() {
     var _message = document.querySelector("#message-to-send").value;
 
     fin.desktop.InterApplicationBus.send({
-            uuid: PARENT_APP,
+            uuid: PARENT_UUID,
             name: _name,
             message: {text:_message, name:_name},
             topic: 'send-to-named',
@@ -143,7 +145,7 @@ function sendToUnNamedMessage() {
     var _message = document.querySelector("#message-to-send").value;
 
     fin.desktop.InterApplicationBus.send({
-            uuid: PARENT_APP,
+            uuid: PARENT_UUID,
             message: {text:_message, name:_name},
             topic: 'send-to-unnamed',
             cache: 'until-delivered'

@@ -5,13 +5,10 @@ var _mainWin,
     _listeners,
     apps = [],
     windowsNames = [],
-    winId = 0;
-//They were all 5.44.9.2. And before they were 4.40.2.0. We only have one openfin app and we spawn other apps from it.
+    winId = 0,
+    _app_to_app_button = null,
+    _app_to_app_uuid ="APP_0";
 
-//CONSTANTS
-
-var CHILD_APP_UUID             = "default-child-app";
-var PARENT_UUID           = "interapp-stress-test";
 
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -33,9 +30,10 @@ function initWithOpenFin(){
     // NB it is 'Window' not 'Application' that the EventListener is being attached to
     _mainWin = fin.desktop.Window.getCurrent();
 
-    _listeners = document.querySelector("#listeners");
-    _namedSendResult = document.querySelector("#named-send-result");
-    _unnamedSendResult = document.querySelector("#unnamed-send-result");
+    _listeners          = document.querySelector("#listeners");
+    _namedSendResult    = document.querySelector("#named-send-result");
+    _unnamedSendResult  = document.querySelector("#unnamed-send-result");
+    _app_to_app_uuid    = document.querySelector("#_app_to_app_uuid");
 
     document.querySelector("#uuid").innerHTML = "<h2>UUID: "+_mainWin.app_uuid+"</h2>";
     fin.desktop.System.getVersion(function (version) {
@@ -61,7 +59,6 @@ function initWithOpenFin(){
         }
     });
 
-
     document.querySelector("#new-btt").addEventListener('click', function(e){
         initNewApp("APP_"+winId).then(function(value){
             winId++;
@@ -76,6 +73,13 @@ function initWithOpenFin(){
     document.querySelector("#max-btt").addEventListener('click', function(e){
         maxAll();
     });
+
+
+
+    document.querySelector("#app_to_app_button").addEventListener('click', function(e){
+        sendAppToApp(_app_to_app_uuid.value, "the message is hello world")
+    });
+
 
     _mainWin.addEventListener('close-requested', function(e) {
         var challenge = confirm('Closing this app will close all child apps.');
@@ -155,6 +159,21 @@ function createSubscriptionTestWindow(){
     });
 };
 
+function sendAppToApp(uuid, message){
+
+    var successCallback = function (e) {
+        console.log("SUCCESSFULLY SENT APP TO APP");
+    };
+
+    var errorCallback = function (e) {
+        console.log("ERROR MESSAGE APP TO APP", e);
+    };
+
+    fin.desktop.InterApplicationBus.send(uuid, TOPIC_APP_TO_APP, {
+        message: message
+    }, successCallback, errorCallback);
+}
+
 function subscribeWithName(id, name){
     var onSuccess = function(){
             console.log("1. subscribeWithName -> UUID: " + id + " Name: " +name )
@@ -233,9 +252,9 @@ function createNamedSubscriptionOldSignature(name){
 //
 
 function initRezizing(){
-    _mainWin.addEventListener("bounds-changed", function (event) {
+    _mainWin.addEventListener(TOPIC_BOUNDS_CHANGED, function (event) {
         console.log("The window has been moved or resized ", event);
-        fin.desktop.InterApplicationBus.publish("bounds-changed-event", {
+        fin.desktop.InterApplicationBus.publish(TOPIC_BOUNDS_CHANGED, {
             bounds: event
         });
     }, function () {

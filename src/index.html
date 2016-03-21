@@ -17,19 +17,32 @@
 <body>
 <div class="container">
     <h3>Parent application</h3>
-    <p>If you resize this window the child windows should resize too.</p>
+    <p>If you resize this window the child app windows should resize too.</p>
     <p id = "of-version"></p>
     <p id = "uuid"></p>
     <button class="btn btn-primary" id ="new-btt">create new App</button>
     <button class="btn btn-primary" id ="min-btt">minimize Apps</button>
     <button class="btn btn-primary" id ="max-btt">maximize Apps</button>
-    <p>Window functions</p>
+    <hr />
+
+    <button class="btn btn-primary" id="app_to_app_button">send to named app</button>
+    <input id="_app_to_app_uuid" type="text" value="APP_0" />
+    <hr />
+
+
+    <p><strong>Window functions</strong></p>
+    <p>Type a unique name for your new window into the box below and click the 'Create New Window' button</p>
+    <p>The created child widow will be listening for:
+    <ul>
+        <li>topic: 'send-to-named', sender UUID: 'default-child-app', name: name of the window</li>
+        <li>topic: 'send-to-named', sender UUID: 'default-child-app'</li>
+    </ul>'
+    </p>
     <button class="btn btn-primary" id ="new-win-btt">Create New Window</button>
     <input id= "window-name" type="text" value ="add a unique window name">
 
-
     <div class="message">
-        <p><strong>Wildcard messages</strong></p>
+        <p><strong>Wildcard and direct to UUID messages</strong></p>
         <div id ="inter-app-message">Message</div>
     </div>
     <div class="message">
@@ -47,5 +60,6 @@
 </div>
 </body>
 </html>
+<script src="js/Constants.js"></script>
 <script src="js/ExternalWindow.js"></script>
 <script src="js/index.js"></script>
