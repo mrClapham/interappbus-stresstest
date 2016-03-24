@@ -24,7 +24,7 @@ var childWindow = {
             };
 
         fin.desktop.InterApplicationBus.subscribe(CHILD_APP_UUID,
-            name,
+            CHILD_APP_UUID,
             "send-to-named",
             function (message, uuid) {
                 console.log(message);
@@ -50,9 +50,3 @@ var childWindow = {
     }
 
 };
-
-
-
-
-
-
